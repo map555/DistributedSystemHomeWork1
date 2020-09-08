@@ -19,10 +19,8 @@ public class Profile {
         client.PrintClient();
         System.out.println("comments:");
 
-        Iterator<Comment> commentIterator=commentsVector.iterator();
-        while(commentIterator.hasNext()){
-            System.out.print(" ");
-            commentIterator.next().PrintComment();
+        for(Comment comment: commentsVector) {
+            System.out.print(" " + comment);
         }
     }
 
