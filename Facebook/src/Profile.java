@@ -1,4 +1,3 @@
-import java.util.Iterator;
 import java.util.Vector;
 
 public class Profile {
@@ -27,6 +26,4 @@ public class Profile {
     public void AddComment(Comment newComment){
         commentsVector.add(newComment);
     }
-
-
 }

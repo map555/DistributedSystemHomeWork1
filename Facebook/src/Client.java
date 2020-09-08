@@ -11,6 +11,10 @@ public class Client {
         this.email = email;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }
@@ -30,5 +34,7 @@ public class Client {
     public void PrintClient(){
         System.out.println(getName()+", Age: "+getAge()+", email: "+getEmail());
     }
+
+
 
 }
