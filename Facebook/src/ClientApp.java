@@ -3,14 +3,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class ClientApp {
     Client client;
     Socket clientSocket;
-    ObjectOutputStream sortie;
-    ObjectInputStream entree;
+    ObjectOutputStream out;
+    ObjectInputStream in;
 
 
 
@@ -38,14 +37,17 @@ public class ClientApp {
         String email = sc.nextLine();
 
         try {
-            sortie = new ObjectOutputStream(clientSocket.getOutputStream());
-            sortie.writeObject("Name:" + name + ";Age:" + age + ";email:" + email);
-            sortie.flush();
-        } catch (IOException e) {
+            in = new ObjectInputStream(clientSocket.getInputStream());
+            out = new ObjectOutputStream(clientSocket.getOutputStream());
+            out.writeObject("Name:" + name + ";Age:" + age + ";email:" + email);
+            out.flush();
+            String message = (String) in.readObject();
+            System.out.println(message);
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        while (true); //TODO: remove this, it's just for testing
+        while (true);
     }
 
     public static void main(String args[]) {

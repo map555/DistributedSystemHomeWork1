@@ -31,10 +31,16 @@ public class Client {
         return email;
     }
 
-    public void PrintClient(){
-        System.out.println(getName()+", Age: "+getAge()+", email: "+getEmail());
+    public String PrintClient(){
+        return getName()+", Age: "+getAge()+", email: "+getEmail();
     }
 
-
-
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 31 * hash + (age == 0 ? 0 : age);
+        hash = 31 * hash + (name == null ? 0 : name.hashCode());
+        hash = 31 * hash + (email == null ? 0: email.hashCode());
+        return hash;
+    }
 }
