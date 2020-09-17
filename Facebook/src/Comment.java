@@ -15,8 +15,9 @@ public class Comment {
         return content;
     }
 
-    public void PrintComment(){
-        System.out.println("ID("+getUserID()+"): "+getContent());
+    @Override
+    public String toString(){
+        return "ID("+getUserID()+"): "+ getContent();
     }
 
 }

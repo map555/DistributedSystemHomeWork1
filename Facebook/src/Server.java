@@ -1,22 +1,27 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Server {
-    private final HashSet<Profile> clients = new HashSet<>(); //TODO: this should be hashMap<Profile, Profile>
-    ObjectOutputStream output;
-    ObjectInputStream input;
+    private final HashMap<Integer, Profile> clients = new HashMap<>();
 
-    public void runServeur() throws IOException {
-        ServerSocket server = new ServerSocket(5432);
-        try {
+    public void runServer() throws IOException {
+        try (ServerSocket server = new ServerSocket(5432)) {
             while (true) {
                 new Handler(server.accept()).start();
             }
-        } finally {
-            server.close();
         }
+    }
+
+    private int getId(Profile profile) {
+        for (Map.Entry entry : clients.entrySet()) {
+            if (profile.equals(entry.getValue())) {
+                return (Integer) entry.getKey();
+            }
+        }
+        return -1;
     }
 
     private Profile login(String credentials) {
@@ -27,18 +32,19 @@ public class Server {
         String email = parts[2].substring(parts[2].indexOf(':') + 1);
         Client client = new Client(-1, age, name, email);
         Profile profile = new Profile(client);
-        if(clients.contains(profile)) {
-            //retrieve id and set it in profile
-            return profile;
+        if (clients.containsValue(profile)) {
+            profile.getClient().setId(getId(profile));
+        } else {
+            profile.getClient().setId(clients.size());
+            clients.put(profile.getClient().getId(), profile);
         }
-        clients.add(profile);
         return profile;
     }
 
     public static void main(String args[]) {
         Server app = new Server();
         try {
-            app.runServeur();
+            app.runServer();
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
@@ -46,11 +52,57 @@ public class Server {
 
     public class Handler extends Thread {
         private Profile profile;
-        private Socket socket;
+        private final Socket socket;
         private ObjectInputStream in;
         private ObjectOutputStream out;
 
-        public Handler(Socket socket) { this.socket = socket; }
+        public Handler(Socket socket) {
+            this.socket = socket;
+        }
+
+        private void menu(String choice) throws IOException, ClassNotFoundException {
+            String message;
+            String ID;
+            Profile chosenProfile;
+            switch (choice) {
+                case "1":
+                    message = "Enter the profile's ID";
+                    out.writeObject(message);
+                    out.flush();
+                    ID = (String) in.readObject();
+                    chosenProfile = clients.get(Integer.parseInt(ID));
+                    message = chosenProfile.printProfileData() + "\n\nPlease Choose\n1 to consult a profile\n2 to post a comment on a profile\n3 disconnect";
+                    out.writeObject(message);
+                    out.flush();
+                    break;
+
+                case "2":
+                    message = "Enter the profile's ID";
+                    out.writeObject(message);
+                    out.flush();
+                    ID = (String) in.readObject();
+                    chosenProfile = clients.get(Integer.parseInt(ID));
+                    out.writeObject("Enter the comment to post");
+                    out.flush();
+                    String commentString = (String) in.readObject();
+                    Comment comment = new Comment(profile.getClient().getId(), commentString);
+                    chosenProfile.addComment(comment);
+                    message = "Comment added!\n\nPlease Choose\n1 to consult a profile\n2 to post a comment on a profile\n3 disconnect";
+                    out.writeObject(message);
+                    out.flush();
+                    break;
+
+                case "3":
+                    out.writeObject("disconnect");
+                    out.flush();
+                    break;
+
+                default:
+                    out.writeObject("Enter 1,2 or 3\n\nPlease Choose\n1 to consult a profile\n2 to post a comment on a profile\n3 disconnect");
+                    out.flush();
+                    break;
+            }
+        }
 
         public void run() {
             try {
@@ -61,12 +113,15 @@ public class Server {
                 String credentials = (String) in.readObject();
                 profile = login(credentials);
 
-                String message = "You are registered, your ID is : " + profile.getClient().getId();
+                String message = "You are registered, your ID is : " + profile.getClient().getId() + "\nPlease Choose\n1 to consult a profile\n2 to post a comment on a profile\n3 disconnect";
                 out.writeObject(message);
                 out.flush();
+                do {
+                    menu((String) in.readObject());
+                } while (true);
 
 
-            }catch (IOException | ClassNotFoundException ioException) {
+            } catch (IOException | ClassNotFoundException ioException) {
                 ioException.printStackTrace();
             }
         }

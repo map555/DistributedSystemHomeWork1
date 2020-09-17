@@ -6,12 +6,9 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class ClientApp {
-    Client client;
     Socket clientSocket;
     ObjectOutputStream out;
     ObjectInputStream in;
-
-
 
     private void connectToServer() {
         try {
@@ -42,12 +39,20 @@ public class ClientApp {
             out.writeObject("Name:" + name + ";Age:" + age + ";email:" + email);
             out.flush();
             String message = (String) in.readObject();
-            System.out.println(message);
+            String answer = "";
+
+            do {
+                System.out.println(message);
+                answer = sc.nextLine();
+                out.writeObject(answer);
+                out.flush();
+                message = (String) in.readObject();
+            } while (!message.equals("disconnect"));
+
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-        while (true);
     }
 
     public static void main(String args[]) {

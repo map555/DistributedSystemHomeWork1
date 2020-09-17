@@ -14,7 +14,7 @@ public class Profile{
         this.commentsVector = commentsVector;
     }
 
-    public String PrintProfileData(){
+    public String printProfileData(){
         StringBuilder profile = new StringBuilder(client.PrintClient());
         profile.append("\ncomments:");
 
@@ -24,7 +24,7 @@ public class Profile{
         return profile.toString();
     }
 
-    public void AddComment(Comment newComment){
+    public void addComment(Comment newComment){
         commentsVector.add(newComment);
     }
 
