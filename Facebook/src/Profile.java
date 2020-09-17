@@ -1,8 +1,10 @@
+import java.net.Socket;
 import java.util.Vector;
 
 public class Profile{
     private final Client client;
     private Vector<Comment> commentsVector;
+    private Socket socket;
 
     public Profile(Client client) {
         this.client = client;
@@ -43,5 +45,13 @@ public class Profile{
 
     public Client getClient() {
         return client;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+    }
+
+    public Socket getSocket() {
+        return socket;
     }
 }
