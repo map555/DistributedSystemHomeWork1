@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,33 +56,18 @@ public class Server {
         private final Socket socket;
         private ObjectInputStream in;
         private ObjectOutputStream out;
+        Profile chosenProfile = new Profile();
+        boolean wantsToConnect = false;
+
 
         public Handler(Socket socket) {
             this.socket = socket;
         }
 
-        private void sendConnectRequest(Profile chosenProfile) {
-            try {
-                out = new ObjectOutputStream(chosenProfile.getSocket().getOutputStream());
-                out.writeObject(profile.getClient().getName() + " wants to chat with you!Do you accept? Y/n");
-                out.flush();
-                in = new ObjectInputStream(chosenProfile.getSocket().getInputStream());
-                String response = (String) in.readObject();
-                if(response.equals("Y")){
-
-                }else {
-
-                }
-
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-
         private void menu(String choice) throws IOException, ClassNotFoundException {
             String message;
             String ID;
-            Profile chosenProfile;
+
             switch (choice) {
                 case "1":
                     message = "Enter the profile's ID";
@@ -89,7 +75,7 @@ public class Server {
                     out.flush();
                     ID = (String) in.readObject();
                     chosenProfile = clients.get(Integer.parseInt(ID));
-                    message = chosenProfile.printProfileData() + "\n\nPlease Choose\n1 to consult a profile\n2 to post a comment on a profile\n3 disconnect";
+                    message = chosenProfile.printProfileData() + "\nPlease Choose\n1 to consult a profile\n2 to post a comment on a profile\n3 Start a chat with another user\n";
                     out.writeObject(message);
                     out.flush();
                     break;
@@ -105,7 +91,7 @@ public class Server {
                     String commentString = (String) in.readObject();
                     Comment comment = new Comment(profile.getClient().getId(), commentString);
                     chosenProfile.addComment(comment);
-                    message = "Comment added!\n\nPlease Choose\n1 to consult a profile\n2 to post a comment on a profile\n3 disconnect";
+                    message = "Comment added!\nPlease Choose\n1 to consult a profile\n2 to post a comment on a profile\n3 Start a chat with another user\n";
                     out.writeObject(message);
                     out.flush();
                     break;
@@ -116,16 +102,12 @@ public class Server {
                     out.flush();
                     ID = (String) in.readObject();
                     chosenProfile = clients.get(Integer.parseInt(ID));
-                    sendConnectRequest(chosenProfile);
-                    break;
-
-                case "4":
-                    out.writeObject("disconnect");
+                    out.writeObject("WAITING Waiting for answer...");
                     out.flush();
                     break;
 
                 default:
-                    out.writeObject("Enter 1,2 or 3\n\nPlease Choose\n1 to consult a profile\n2 to post a comment on a profile\n3 disconnect");
+                    out.writeObject("Enter a valid string\nPlease Choose\n1 to consult a profile\n2 to post a comment on a profile\n3 Start a chat with another user\n");
                     out.flush();
                     break;
             }
@@ -140,15 +122,25 @@ public class Server {
                 String credentials = (String) in.readObject();
                 profile = login(credentials);
                 profile.setSocket(socket);
+                profile.setOutputStream(out);
+                profile.setInputStream(in);
 
-                String message = "You are registered, your ID is : " + profile.getClient().getId() + "\nPlease Choose\n1 to consult a profile\n2 to post a comment on a profile\n3 Start a chat with another user\n4disconnect";
+                String message = "You are registered, your ID is : " + profile.getClient().getId() + "\nPlease Choose\n1 to consult a profile\n2 to post a comment on a profile\n3 Start a chat with another user";
                 out.writeObject(message);
                 out.flush();
-                do {
-                    menu((String) in.readObject());
-                } while (true);
 
-
+                while (true) {
+                    Object input = in.readObject();
+                    if(input instanceof String) {
+                        menu((String) input);
+                    } else if(input instanceof SocketAddress) {
+                        chosenProfile.getOutputStream().writeObject(profile.getClient().getName() + " wants to chat with you! Do you accept? Y/n");
+                        chosenProfile.getOutputStream().flush();
+                        //TODO: how to know if the chosenProfile accepts the request???
+                        chosenProfile.getOutputStream().writeObject((SocketAddress) input);
+                        chosenProfile.getOutputStream().flush();
+                    }
+                }
             } catch (IOException | ClassNotFoundException ioException) {
                 ioException.printStackTrace();
             }
