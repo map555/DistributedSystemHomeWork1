@@ -74,7 +74,7 @@ public class Server {
             chosenProfile = new Profile();
 
             switch (choice) {
-                case "1" -> {
+                case "1" : {
                     message = "Enter the profile's ID";
                     out.writeObject(message);
                     out.flush();
@@ -83,8 +83,9 @@ public class Server {
                     message = chosenProfile.printProfileData() + getMenuString();
                     out.writeObject(message);
                     out.flush();
+                    break;
                 }
-                case "2" -> {
+                case "2" : {
                     message = "Enter the profile's ID";
                     out.writeObject(message);
                     out.flush();
@@ -98,8 +99,9 @@ public class Server {
                     message = "Comment added!" + getMenuString();
                     out.writeObject(message);
                     out.flush();
+                    break;
                 }
-                case "3" -> {
+                case "3" : {
                     message = "Enter the profile's ID";
                     out.writeObject(message);
                     out.flush();
@@ -116,14 +118,17 @@ public class Server {
                         out.writeObject("Profile does not exist!" + getMenuString());
                         out.flush();
                     }
+                    break;
                 }
-                case "4" -> {
+                case "4" : {
                     out.writeObject(profile.getChats() + getMenuString());
                     out.flush();
+                    break;
                 }
-                default -> {
+                default : {
                     out.writeObject("Enter a valid string" + getMenuString());
                     out.flush();
+                    break;
                 }
             }
         }
