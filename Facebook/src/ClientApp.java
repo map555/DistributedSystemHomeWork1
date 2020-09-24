@@ -9,8 +9,6 @@ import java.util.Scanner;
 
 public class ClientApp {
     Socket clientSocket;
-    Socket chatClientSocket;
-    ServerSocket chatServer;
     ObjectOutputStream out;
     ObjectInputStream in;
 
@@ -19,26 +17,6 @@ public class ClientApp {
             clientSocket = new Socket(
                     InetAddress.getByName("127.0.0.1"), 5432);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void connectToChatServer(SocketAddress socketAddress) {
-        chatClientSocket = new Socket();
-        try {
-            chatClientSocket.connect(socketAddress);
-            System.out.println("Connection successful");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void createChatServer(){
-        try {
-            chatServer = new ServerSocket(0);
-            out.writeObject(chatServer.getLocalSocketAddress());
-            out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,26 +42,14 @@ public class ClientApp {
             out.flush();
 
             Thread listenerThread = new Thread(() -> {
-                Object message = new Object();
+                String message = "";
                 while (true) {
                     try {
-                        message = in.readObject();
+                        message = (String) in.readObject();
                     } catch (IOException | ClassNotFoundException e) {
                         e.printStackTrace();
                     }
-                    if (message instanceof SocketAddress) {
-                        connectToChatServer((SocketAddress) message);
-                    } else if(message instanceof String) {
-                        System.out.println((String) message);
-                        if(((String) message).startsWith("WAITING")) {
-                            createChatServer();
-                            try {
-                                new ChatHandler(chatServer.accept()).start();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
+                    System.out.println(message);
                 }
             });
             listenerThread.start();
@@ -101,20 +67,6 @@ public class ClientApp {
             e.printStackTrace();
         }
     }
-
-    private class ChatHandler extends Thread {
-        Socket socket;
-
-        public ChatHandler(Socket socket) {
-            this.socket = socket;
-        }
-
-        @Override
-        public void run() {
-            System.out.println("Sockcet: " + socket.getRemoteSocketAddress());
-        }
-    }
-
 
     public static void main(String args[]) {
 

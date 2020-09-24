@@ -6,6 +6,7 @@ import java.util.Vector;
 public class Profile{
     private Client client;
     private Vector<Comment> commentsVector;
+    private String chat = "";
     private Socket socket;
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
@@ -75,5 +76,13 @@ public class Profile{
 
     public void setOutputStream(ObjectOutputStream outputStream) {
         this.outputStream = outputStream;
+    }
+
+    public void addChat(String newChat) {
+        chat += newChat + "\n";
+    }
+
+    public String getChats() {
+        return chat;
     }
 }
