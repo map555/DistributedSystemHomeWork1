@@ -1,26 +1,15 @@
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.Vector;
 
 public class Profile{
     private Client client;
     private Vector<Comment> commentsVector;
     private String chat = "";
-    private Socket socket;
-    private ObjectInputStream inputStream;
-    private ObjectOutputStream outputStream;
 
     public Profile() {}
 
     public Profile(Client client) {
         this.client = client;
         commentsVector=new Vector<>();
-    }
-
-    public Profile(Client client, Vector<Comment> commentsVector) {
-        this.client = client;
-        this.commentsVector = commentsVector;
     }
 
     public String printProfileData(){
@@ -52,30 +41,6 @@ public class Profile{
 
     public Client getClient() {
         return client;
-    }
-
-    public void setSocket(Socket socket) {
-        this.socket = socket;
-    }
-
-    public Socket getSocket() {
-        return socket;
-    }
-
-    public ObjectInputStream getInputStream() {
-        return inputStream;
-    }
-
-    public void setInputStream(ObjectInputStream inputStream) {
-        this.inputStream = inputStream;
-    }
-
-    public ObjectOutputStream getOutputStream() {
-        return outputStream;
-    }
-
-    public void setOutputStream(ObjectOutputStream outputStream) {
-        this.outputStream = outputStream;
     }
 
     public void addChat(String newChat) {

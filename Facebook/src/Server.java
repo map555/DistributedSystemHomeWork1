@@ -1,7 +1,6 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -141,9 +140,6 @@ public class Server {
 
                 String credentials = (String) in.readObject();
                 profile = login(credentials);
-                profile.setSocket(socket);
-                profile.setOutputStream(out);
-                profile.setInputStream(in);
 
                 String message = "You are registered, your ID is : " + profile.getClient().getId() + getMenuString();
                 out.writeObject(message);
