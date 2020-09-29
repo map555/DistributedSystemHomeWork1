@@ -1,3 +1,5 @@
+/*Cette classe représente l'objet client et contient les informations de l'utilisateur*/
+
 public class Client {
     private int id;
     private int age;

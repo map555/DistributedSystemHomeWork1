@@ -1,5 +1,8 @@
 import java.util.Vector;
 
+/*Cette classe représente un profile d'un utilisateur, elle contient un objet client qui contient les informations de bases de client
+* . on peut aussi retrouver les commentaires qui on été faits sur le profile de l'utilisateur ainsi que les chats qu'il a reçu.*/
+
 public class Profile{
     private Client client;
     private Vector<Comment> commentsVector;

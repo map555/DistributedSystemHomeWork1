@@ -1,3 +1,5 @@
+/*Cette classe représente un commentaire et ne contient que l'id de l'utilisateur et le contenu du commentaire en question.*/
+
 public class Comment {
     private int userID;
     private String content;
