@@ -46,11 +46,9 @@ public class Client {
                 quit=true;
             }
 
-
         }
 
+        System.exit(0);
+
     }
-
-
-
 }

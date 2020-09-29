@@ -12,72 +12,65 @@ public class CalculatorManagerInterfaceImp extends UnicastRemoteObject implement
     private CalculatorInterface calculator3Interface;
 
 
-
     public CalculatorManagerInterfaceImp() throws RemoteException, MalformedURLException, NotBoundException {
         super();
-        operationCounter=0;
-        calculator1Interface=(CalculatorInterface) Naming.lookup(getCalculatorURL(1));
-        calculator2Interface=(CalculatorInterface) Naming.lookup(getCalculatorURL(2));
-        calculator3Interface=(CalculatorInterface) Naming.lookup(getCalculatorURL(3));
+        operationCounter = 0;
+        calculator1Interface = (CalculatorInterface) Naming.lookup(getCalculatorURL(1));
+        calculator2Interface = (CalculatorInterface) Naming.lookup(getCalculatorURL(2));
+        calculator3Interface = (CalculatorInterface) Naming.lookup(getCalculatorURL(3));
         System.out.println("Connected successfully to the calculators 1,2 and 3.");
     }
 
 
-
-    private static String getCalculatorURL(int calculatorID){
-
-        return  String.format("rmi://localhost:4202%d/Calculator%d",calculatorID,calculatorID);
-
+    private static String getCalculatorURL(int calculatorID) {
+        return String.format("rmi://localhost:4202%d/Calculator%d", calculatorID, calculatorID);
     }
 
 
-
-
     @Override
-    public  void Compute(int value1, int value2, char operator, ClientInterface clientObjectCallback) throws RemoteException, InterruptedException {
+    public void Compute(int value1, int value2, char operator, ClientInterface clientObjectCallback) throws RemoteException, InterruptedException {
 
-
-        switch (operationCounter%3){
+        switch (operationCounter % 3) {
             //calculator1
-            case(0):{
+            case (0): {
 
-                switch (operator){
+                switch (operator) {
 
                     //addition from calculator1
-                    case('+'):{
+                    case ('+'): {
 
-                         calculator1Interface.Addition(value1,value2,clientObjectCallback);
+                        calculator1Interface.Addition(value1, value2, clientObjectCallback);
                         break;
 
                     }
 
                     //substraction from calculator1
-                    case('-'):{
+                    case ('-'): {
 
-                        calculator1Interface.Substraction(value1,value2,clientObjectCallback);
+                        calculator1Interface.Substraction(value1, value2, clientObjectCallback);
                         break;
 
                     }
 
                     //multiplication from calculator1
-                    case('*'):{
+                    case ('*'): {
 
-                        calculator1Interface.Multiplication(value1,value2,clientObjectCallback);
+                        calculator1Interface.Multiplication(value1, value2, clientObjectCallback);
                         break;
 
                     }
 
                     //division from calculator1
-                    case('/'):{
+                    case ('/'): {
 
-                        calculator1Interface.Division(value1,value2,clientObjectCallback);
+                        calculator1Interface.Division(value1, value2, clientObjectCallback);
                         break;
 
                     }
 
                     //invalid operator result from calculator1
-                    default:{
-                        System.out.print("INVALID OPERATOR\n\tThe accepted operators are \"+\", \"-\", \"*\" and \"/\".\n" );
+                    default: {
+                        System.out.print("INVALID OPERATOR\n\tThe accepted operators are \"+\", \"-\", \"*\" and \"/\".\n");
                         calculator1Interface.InvalidOperator(clientObjectCallback);
                     }
 
@@ -86,46 +79,46 @@ public class CalculatorManagerInterfaceImp extends UnicastRemoteObject implement
             }
 
             //calculator2
-            case(1):{
+            case (1): {
 
-                switch (operator){
+                switch (operator) {
 
                     //addition from calculator2
-                    case('+'):{
+                    case ('+'): {
 
-                        calculator2Interface.Addition(value1,value2,clientObjectCallback);
+                        calculator2Interface.Addition(value1, value2, clientObjectCallback);
                         break;
 
                     }
 
                     //substraction from calculator2
-                    case('-'):{
+                    case ('-'): {
 
-                        calculator2Interface.Substraction(value1,value2,clientObjectCallback);
+                        calculator2Interface.Substraction(value1, value2, clientObjectCallback);
                         break;
 
                     }
 
                     //multiplication from calculator2
-                    case('*'):{
+                    case ('*'): {
 
-                        calculator2Interface.Multiplication(value1,value2,clientObjectCallback);
+                        calculator2Interface.Multiplication(value1, value2, clientObjectCallback);
                         break;
 
                     }
 
                     //division from calculator2
-                    case('/'):{
+                    case ('/'): {
 
-                        calculator2Interface.Division(value1,value2,clientObjectCallback);
+                        calculator2Interface.Division(value1, value2, clientObjectCallback);
                         break;
 
                     }
 
                     //invalid operator result from calculator2
-                    default:{
+                    default: {
 
-                        System.out.print("INVALID OPERATOR\n\tThe accepted operators are \"+\", \"-\", \"*\" and \"/\".\n " );
+                        System.out.print("INVALID OPERATOR\n\tThe accepted operators are \"+\", \"-\", \"*\" and \"/\".\n ");
                         calculator2Interface.InvalidOperator(clientObjectCallback);
 
                     }
@@ -137,46 +130,46 @@ public class CalculatorManagerInterfaceImp extends UnicastRemoteObject implement
             }
 
             //calculator3
-            case(2):{
+            case (2): {
 
-                switch (operator){
+                switch (operator) {
 
                     //addition from calculator3
-                    case('+'):{
+                    case ('+'): {
 
-                        calculator3Interface.Addition(value1,value2,clientObjectCallback);
+                        calculator3Interface.Addition(value1, value2, clientObjectCallback);
                         break;
 
                     }
 
                     //substraction from calculator3
-                    case('-'):{
+                    case ('-'): {
 
-                        calculator3Interface.Substraction(value1,value2,clientObjectCallback);
+                        calculator3Interface.Substraction(value1, value2, clientObjectCallback);
                         break;
 
                     }
 
                     //multiplication from calculator3
-                    case('*'):{
+                    case ('*'): {
 
-                        calculator3Interface.Multiplication(value1,value2,clientObjectCallback);
+                        calculator3Interface.Multiplication(value1, value2, clientObjectCallback);
                         break;
 
                     }
 
                     //division from calculator3
-                    case('/'):{
+                    case ('/'): {
 
-                        calculator3Interface.Division(value1,value2,clientObjectCallback);
+                        calculator3Interface.Division(value1, value2, clientObjectCallback);
                         break;
 
                     }
 
                     //invalid operator result from calculator3
-                    default:{
+                    default: {
 
-                        System.out.print(" =  INVALID OPERATOR\n\tThe accepted operators are \"+\", \"-\", \"*\" and \"/\".\n " );
+                        System.out.print(" =  INVALID OPERATOR\n\tThe accepted operators are \"+\", \"-\", \"*\" and \"/\".\n ");
                         calculator3Interface.InvalidOperator(clientObjectCallback);
 
                     }
@@ -185,14 +178,9 @@ public class CalculatorManagerInterfaceImp extends UnicastRemoteObject implement
                 break;
             }
 
-
-
         }
-        System.out.println("Operation sent on calculator"+((operationCounter%3)+1));
+        System.out.println("Operation sent on calculator" + ((operationCounter % 3) + 1));
         operationCounter++;
     }
-
-
-
 
 }
