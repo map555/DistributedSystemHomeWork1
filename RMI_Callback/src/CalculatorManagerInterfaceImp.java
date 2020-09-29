@@ -4,6 +4,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+/*Cette classe implémente l'interface CalculatorManagerInterface et défini la méthode Compute qui sera appelé par le client*/
+
 public class CalculatorManagerInterfaceImp extends UnicastRemoteObject implements CalculatorManagerInterface {
 
     private int operationCounter;
@@ -12,6 +14,7 @@ public class CalculatorManagerInterfaceImp extends UnicastRemoteObject implement
     private CalculatorInterface calculator3Interface;
 
 
+    /*Le constructeur initialise le compteur d'opération à 0 et va chercher les calculateur à l'aide de leur adresse réseau*/
     public CalculatorManagerInterfaceImp() throws RemoteException, MalformedURLException, NotBoundException {
         super();
         operationCounter = 0;
@@ -27,6 +30,7 @@ public class CalculatorManagerInterfaceImp extends UnicastRemoteObject implement
     }
 
 
+    /*La méthode compute s'assure que la bonne méthode sera appelé sur le bon calculateur, les calculateurs sont choisis à tour de rôle */
     @Override
     public void Compute(int value1, int value2, char operator, ClientInterface clientObjectCallback) throws RemoteException, InterruptedException {
 
@@ -179,7 +183,7 @@ public class CalculatorManagerInterfaceImp extends UnicastRemoteObject implement
             }
 
         }
-        System.out.println("Operation sent on calculator" + ((operationCounter % 3) + 1));
+        System.out.println("Operation " + operationCounter + " done on calculator " + ((operationCounter % 3) + 1));
         operationCounter++;
     }
 

@@ -5,11 +5,14 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
+/*Cette classe représente un client qui enverra des requêtes à l'aiguilleur*/
+
 public class Client {
 
 
 
     public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException, InterruptedException {
+        //On se connecte à l'aiguilleur et on récupère son interface
         int port=42020;
         String url=String.format("rmi://localhost:%d/CalculatorManager",port);
         Remote remoteCalculatorManagerInterface= Naming.lookup(url);
@@ -24,6 +27,8 @@ public class Client {
         char charInput;
         boolean quit=false;
 
+        //On demande à l'utilisateur d'entrer les informations pour le calculs et ensuite on appelle la fonction de l'aiguilleur Compute(),
+        //On effectue cela jusqu'à ce que l'utilisateur choisisse de quitter l'application
         while (!quit){
 
             System.out.print("Please enter value1 (integer): ");

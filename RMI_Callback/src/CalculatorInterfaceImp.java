@@ -2,6 +2,9 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.TimeUnit;
 
+/*Cette interface défini les méthodes du calculateur qui sont appelé par l'aiguilleur, ce sont de simples
+* méthode de calculs de bases avec une simulation de temps de calcul de 10 secondes*/
+
 public class CalculatorInterfaceImp extends UnicastRemoteObject implements CalculatorInterface {
     protected CalculatorInterfaceImp() throws RemoteException {}
 

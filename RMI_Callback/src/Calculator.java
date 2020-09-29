@@ -5,6 +5,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
 
+/*Cette classe représente un calculateur*/
+
 public class Calculator {
 
     public  static void main(String[] args) throws RemoteException, MalformedURLException {
@@ -13,7 +15,7 @@ public class Calculator {
         int calculatorID;
         Scanner input = new Scanner(System.in);  // Create a Scanner object
 
-
+        //On demande d'entrer le numéro du calculateur afin de lui alloué le bon port, ensuite on met le calculateur accessible sur le réseau pour l'aiguilleur
         System.out.println("Enter the calculator number (1,2,3)");
         String inputString=input.nextLine();
         switch(inputString){
@@ -44,7 +46,5 @@ public class Calculator {
         CalculatorInterfaceImp Calculator=new CalculatorInterfaceImp();
         Naming.rebind(url,Calculator);
         System.out.println("Calculator"+calculatorID+" started.");
-
-
     }
 }
