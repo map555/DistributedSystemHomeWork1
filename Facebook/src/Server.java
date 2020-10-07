@@ -84,7 +84,12 @@ public class Server {
                     out.flush();
                     ID = (String) in.readObject();
                     chosenProfile = clients.get(Integer.parseInt(ID));
-                    message = chosenProfile.printProfileData() + getMenuString();
+                    if(chosenProfile!=null){
+                        message = chosenProfile.printProfileData() + getMenuString();
+                    }
+                    else {
+                        message="Profile does not exist!"+getMenuString();
+                    }
                     out.writeObject(message);
                     out.flush();
                     break;
@@ -97,12 +102,19 @@ public class Server {
                     out.flush();
                     ID = (String) in.readObject();
                     chosenProfile = clients.get(Integer.parseInt(ID));
-                    out.writeObject("Enter the comment to post");
-                    out.flush();
-                    String commentString = (String) in.readObject();
-                    Comment comment = new Comment(profile.getClient().getId(), commentString);
-                    chosenProfile.addComment(comment);
-                    message = "Comment added!" + getMenuString();
+                    if(chosenProfile!=null)
+                    {
+                        out.writeObject("Enter the comment to post");
+                        out.flush();
+                        String commentString = (String) in.readObject();
+                        Comment comment = new Comment(profile.getClient().getId(), commentString);
+                        chosenProfile.addComment(comment);
+                        message = "Comment added!" + getMenuString();
+                    }
+                    else {
+                        message="Profile does not exist!"+getMenuString();
+                    }
+
                     out.writeObject(message);
                     out.flush();
                     break;
@@ -134,6 +146,8 @@ public class Server {
                     out.flush();
                     break;
                 }
+
+
                 //Si l'utilisateur n'entre pas un choix valide, on lui dit et on réaffiche le menu.
                 default : {
                     out.writeObject("Enter a valid string" + getMenuString());
